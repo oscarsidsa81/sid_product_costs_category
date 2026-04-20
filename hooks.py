@@ -28,12 +28,6 @@ FIELD_RENAMES = {
     ('sale.order.line', 'x_studio_monetary_field_ExXXQ'): 'sid_cost_category',
 }
 
-STUDIO_VIEWS_TO_DISABLE = [
-    ('product.category', 'Odoo Studio: product.category.form customization'),
-    ('product.category', 'Odoo Studio: product.category.list customization'),
-    ('product.template', 'Odoo Studio: product.template.product.form customization'),
-]
-
 
 def _column_exists(cr, table, column):
     cr.execute(
@@ -55,11 +49,6 @@ def _rename_column_if_needed(cr, table, old, new):
 
 
 
-def _replace_view_arch_field_names(cr):
-    for old, new in FIELD_RENAMES.values():
-        pass
-
-
 
 def pre_init_hook(cr):
     # 1) Rename stored columns before model initialization.
@@ -78,45 +67,8 @@ def pre_init_hook(cr):
             (old_name, new_name, '%%%s%%' % old_name),
         )
 
-    # 3) Disable the narrow Studio views that are replaced by module XML.
-    for model, name in STUDIO_VIEWS_TO_DISABLE:
-        cr.execute(
-            """
-            UPDATE ir_ui_view
-               SET active = FALSE
-             WHERE model = %s
-               AND name = %s
-            """,
-            (model, name),
-        )
-
-    # 4) Remove old manual field definitions so the module can own the new names.
-    old_field_ids = []
-    for (model, old_name), _new_name in FIELD_RENAMES.items():
-        cr.execute(
-            """
-            SELECT id
-              FROM ir_model_fields
-             WHERE model = %s
-               AND name = %s
-            """,
-            (model, old_name),
-        )
-        old_field_ids.extend(row[0] for row in cr.fetchall())
-
-    if old_field_ids:
-        cr.execute(
-            "DELETE FROM ir_model_data WHERE model = 'ir.model.fields' AND res_id = ANY(%s)",
-            (old_field_ids,),
-        )
-        cr.execute(
-            "DELETE FROM ir_model_fields_selection WHERE field_id = ANY(%s)",
-            (old_field_ids,),
-        )
-        cr.execute(
-            "DELETE FROM ir_model_fields WHERE id = ANY(%s)",
-            (old_field_ids,),
-        )
+    # 3) Keep Studio metadata and legacy views for a later controlled cleanup phase.
+    #    This hook intentionally avoids deleting ir.model.fields or deactivating views.
 
 
 
