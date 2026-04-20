@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <xpath expr="//field[@name='default_code']" position="before">
                     <field name="sid_cost_category" string="Coste de Categoría"/>
-                    <field name="sid_cost_ton_category" string="Coste/Ton Categoría/>
+                    <field name="sid_cost_ton_category" string="Coste/Ton Categoría"/>
                 </xpath>
             </field>
         </record>
