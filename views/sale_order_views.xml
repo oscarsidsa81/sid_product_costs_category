@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_sale_order_form_sid_cost" model="ir.ui.view">
+            <field name="name">sale.order.form.sid.cost</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="priority">4000</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sid_cost_category']" position="replace">
+                    <field name="sid_cost_category"
+                           string="Coste Recomendado"
+                           attrs="{'invisible': [('sid_cost_category', '=', 0)]}"
+                           style="color: yellow; background-color: black;"/>
+                </xpath>
+                <xpath expr="//field[@name='purchase_price']" position="after">
+                    <field name="sid_cost_category"
+                           string="Coste Recomendado"
+                           attrs="{'invisible': [('sid_cost_category', '=', 0)]}"
+                           style="color: yellow; background-color: black;"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

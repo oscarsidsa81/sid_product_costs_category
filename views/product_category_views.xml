@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_product_category_tree_sid_cost" model="ir.ui.view">
+            <field name="name">product.category.tree.sid.cost</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_list_view"/>
+            <field name="priority">2000</field>
+            <field name="arch" type="xml">
+                <xpath expr="//tree" position="attributes">
+                    <attribute name="multi_edit">true</attribute>
+                </xpath>
+                <xpath expr="//field[@name='display_name']" position="before">
+                    <field name="sid_cost_avg_ton" optional="show"/>
+                    <field name="sid_cost_ton" optional="show"/>
+                    <field name="sid_currency_id" optional="hide"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
